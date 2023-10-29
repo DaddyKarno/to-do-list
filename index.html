@@ -11,24 +11,23 @@
         <div class="dHead">
           <p class="titleName">TODO LIST</p>
           <div class="search">
-            <input type="text" id="searchInput" size="50px" />
-            <button class="addButton"></button>
+            <input
+              class="searchTextInput"
+              type="text"
+              placeholder="add note..."
+              id="searchInput"
+              size="50px"
+            />
+            <button class="addButton" id="addTaskButton"></button>
           </div>
         </div>
         <div class="dBody">
           <div class="list">
-            <ul id="listTask">
-              <li class="listGroup">
-                <span class="nameInputTask">Name</span>
-                <span>
-                  <span class="edit"></span>
-                  <span class="delete"></span>
-                </span>
-              </li>
-            </ul>
+            <ul id="listTask"></ul>
           </div>
         </div>
       </div>
     </div>
+    <script src="scripts/myScript.js"></script>
   </body>
 </html>

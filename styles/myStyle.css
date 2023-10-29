@@ -54,8 +54,6 @@
   height: 38px;
   padding: 8px 16px;
   align-items: center;
-  border-radius: 5px;
-  border: 1px solid var(--purple, #6c63ff);
 }
 .list {
   font-family: Kanit;
@@ -87,4 +85,53 @@
   height: 50px;
   cursor: pointer;
   border: 0;
+}
+.edit {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  background: url(../images/Frame_6.png) 50% 50% no-repeat;
+  border: 0;
+}
+.delete {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  background: url(../images/trash-svgrepo-com.png) 50% 50% no-repeat;
+  border: 0;
+}
+.searchTextInput {
+  border-radius: 5px;
+  border: 1px solid var(--purple, #6c63ff);
+  height: 38px;
+  padding: 8px 16px;
+}
+.completedTasks {
+  text-decoration: line-through;
+  color: grey;
+  font-family: Kanit;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 100%; /* 20px */
+  text-transform: uppercase;
+}
+.completedBtnTrue {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border: 1px solid var(--purple, #6c63ff);
+  background-color: #6c63ff;
+}
+.completedBtnFalse {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border: 1px solid var(--purple, #6c63ff);
+}
+ul {
+  list-style-type: none;
+}
+li {
+  list-style-type: none;
 }
