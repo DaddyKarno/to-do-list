@@ -2,16 +2,8 @@ const InputElement = document.getElementById("searchInput");
 const addBtn = document.getElementById("addTaskButton");
 const listElement = document.getElementById("listTask");
 const completeBtn = document.getElementById("cmpltBtn");
-const notes = [
-  {
-    title: "Learn js",
-    completed: false,
-  },
-  {
-    title: "Commit changes",
-    completed: true,
-  },
-];
+const editBool = false;
+let notes = [];
 function render() {
   listElement.innerHTML = "";
   if (notes.length === 0) {
@@ -20,12 +12,13 @@ function render() {
   for (let i = 0; i < notes.length; i++) {
     listElement.insertAdjacentHTML("beforeend", getTask(notes[i], i));
   }
+  getItems();
 }
 addBtn.onclick = function () {
   if (InputElement.value.length === 0) {
     return;
   }
-  const newNote = {
+  let newNote = {
     title: InputElement.value,
     completed: false,
   };
@@ -39,11 +32,21 @@ listElement.onclick = function (event) {
     const type = event.target.dataset.type;
     if (type === "deleteBtn") {
       notes.splice(index, 1);
+      render();
     } else if (type === "cmpltBtn") {
       notes[index].completed = !notes[index].completed;
+      render();
+    } else if (type === "editBtn") {
+      notes[
+        index
+      ].title = `<input id="editTask" type="text"></input><button id="confirmBtnId" class="confirmStyle" data-index="${index}" data-type="confirmBtn"></button>`;
+      render();
+    } else if (type === "confirmBtn") {
+      console.log("a");
+      notes[index].title = document.getElementById("editTask").value;
+      render();
     }
   }
-  render();
 };
 function getTask(note, index) {
   return `
@@ -61,4 +64,8 @@ function getTask(note, index) {
   </li>
       `;
 }
+function getItems() {
+  localStorage.setItem("Note", JSON.stringify(notes));
+}
+
 render();

@@ -135,3 +135,10 @@ ul {
 li {
   list-style-type: none;
 }
+.confirmStyle {
+  background: url(../images/ok.png) 50% 50% no-repeat;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border: 0;
+}
