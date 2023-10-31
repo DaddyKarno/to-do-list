@@ -3,16 +3,20 @@ const addBtn = document.getElementById("addTaskButton");
 const listElement = document.getElementById("listTask");
 const completeBtn = document.getElementById("cmpltBtn");
 const editBool = false;
+let test = [];
 let notes = [];
 function render() {
   listElement.innerHTML = "";
+  test = JSON.parse(localStorage.getItem("Note"));
   if (notes.length === 0) {
     listElement.innerHTML = '<p><img src="images/empty.png"></p>';
+  }
+  if (notes.length > 0) {
+    localStorage.setItem("Note", JSON.stringify(notes) || "[]");
   }
   for (let i = 0; i < notes.length; i++) {
     listElement.insertAdjacentHTML("beforeend", getTask(notes[i], i));
   }
-  getItems();
 }
 addBtn.onclick = function () {
   if (InputElement.value.length === 0) {
@@ -42,7 +46,6 @@ listElement.onclick = function (event) {
       ].title = `<input id="editTask" type="text"></input><button id="confirmBtnId" class="confirmStyle" data-index="${index}" data-type="confirmBtn"></button>`;
       render();
     } else if (type === "confirmBtn") {
-      console.log("a");
       notes[index].title = document.getElementById("editTask").value;
       render();
     }
@@ -64,8 +67,12 @@ function getTask(note, index) {
   </li>
       `;
 }
-function getItems() {
-  localStorage.setItem("Note", JSON.stringify(notes));
+function loadPage() {
+  for (let i = 0; i < test.length; i++) {
+    notes.push(test[i]);
+    console.log(test[i]);
+  }
+  render();
 }
-
 render();
+window.onload = loadPage();
