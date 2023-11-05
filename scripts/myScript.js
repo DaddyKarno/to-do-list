@@ -13,6 +13,8 @@ function render() {
   }
   if (notes.length > 0) {
     localStorage.setItem("Note", JSON.stringify(notes) || "[]");
+  } else if (notes.length === 0) {
+    localStorage.setItem("Note", JSON.stringify(notes) || "[]");
   }
   for (let i = 0; i < notes.length; i++) {
     listElement.insertAdjacentHTML("beforeend", getTask(notes[i], i));
