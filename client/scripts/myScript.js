@@ -20,7 +20,7 @@ function render() {
     listElement.insertAdjacentHTML("beforeend", getTask(notes[i], i));
   }
 }
-addBtn.onclick = function () {
+addBtn.onclick = async function () {
   if (InputElement.value.length === 0) {
     return;
   }
@@ -28,15 +28,19 @@ addBtn.onclick = function () {
     title: InputElement.value,
     completed: false,
   };
-  notes.push(newNote);
+
+  const { ...contact } = newNote;
+  const newServerTask = await request("/api/contacts", "POST", contact);
+  notes.push(newServerTask);
   render();
   InputElement.value = "";
 };
-listElement.onclick = function (event) {
+listElement.onclick = async function (event) {
   if (event.target.dataset.index) {
     const index = parseInt(event.target.dataset.index);
     const type = event.target.dataset.type;
     if (type === "deleteBtn") {
+      await request(`/api/contacts/${notes.id}`, "DELETE");
       notes.splice(index, 1);
       render();
     } else if (type === "cmpltBtn") {
@@ -73,12 +77,11 @@ async function loadPage() {
   /*  for (let i = 0; i < test.length; i++) {
     notes.push(test[i]);
   } */
-  let serverNotes = [];
-  serverNotes.push(await request("/api/contacts"));
+  serverNotes = [];
+  serverNotes = await request("/api/contacts");
   for (let i = 0; i < serverNotes.length; i++) {
     notes.push(serverNotes[i]);
   }
-  console.log(notes);
   render();
 }
 async function request(url, method = "GET", data = null) {

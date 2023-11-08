@@ -1,11 +1,27 @@
 const express = require("express");
 const path = require("path");
 const app = express();
+const { v4 } = require("uuid");
 
-const TASKLIST = { title: "Complete the task from Vlad", completed: false };
-
+let TASKLIST = [
+  { id: v4(), title: "Complete the task from Vlad", completed: false },
+  { id: v4(), title: "learn  js", completed: false },
+];
+app.use(express.json());
+//GET
 app.get("/api/contacts", (req, res) => {
   res.status(200).json(TASKLIST);
+});
+//POST
+app.post("/api/contacts", (req, res) => {
+  const task = { ...req.body, id: v4() };
+  TASKLIST.push(task);
+  res.status(201).json(task);
+});
+//DELETE
+app.delete("/api/contacts/:id", (req, res) => {
+  TASKLIST = TASKLIST.filter((c) => c.id !== req.params.id);
+  res.status(200).json({ message: "Контакт был удален" });
 });
 
 app.use(express.static(path.resolve(__dirname, "client")));
