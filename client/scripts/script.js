@@ -28,7 +28,6 @@ addBtn.onclick = async function () {
     title: InputElement.value,
     completed: false,
   };
-
   const { ...contact } = newNote;
   const newServerTask = await request("/api/contacts", "POST", contact);
   notes.push(newServerTask);
@@ -36,23 +35,34 @@ addBtn.onclick = async function () {
   InputElement.value = "";
 };
 listElement.onclick = async function (event) {
+  const { ...contact } = notes;
   if (event.target.dataset.index) {
     const index = parseInt(event.target.dataset.index);
     const type = event.target.dataset.type;
     if (type === "deleteBtn") {
-      await request(`/api/contacts/${notes.id}`, "DELETE");
+      console.log(notes[index].id)
+      await request(`/api/contacts/${notes[index].id}`, 'DELETE')
       notes.splice(index, 1);
       render();
     } else if (type === "cmpltBtn") {
-      notes[index].completed = !notes[index].completed;
-      render();
-    } else if (type === "editBtn") {
+      const contact = notes[index]
+      const update =await request(`/api/contacts/${notes[index].id}`, 'PUT',{
+        ...contact,
+        completed: !contact.completed
+      })
+      contact.completed = update.completed
+      } else if (type === "editBtn") {
       notes[
         index
       ].title = `<input id="editTask" type="text"></input><button id="confirmBtnId" class="confirmStyle" data-index="${index}" data-type="confirmBtn"></button>`;
       render();
     } else if (type === "confirmBtn") {
+      const contact = notes[index]
       notes[index].title = document.getElementById("editTask").value;
+      const update =await request(`/api/contacts/${notes[index].id}`, 'PUT',{
+        ...contact,
+        title: contact.title
+      })
       render();
     }
   }

@@ -20,9 +20,14 @@ app.post("/api/contacts", (req, res) => {
 });
 //DELETE
 app.delete("/api/contacts/:id", (req, res) => {
-  TASKLIST = TASKLIST.filter((c) => c.id !== req.params.id);
+  TASKLIST = TASKLIST.filter(({ id }) => id !== req.params.id);
   res.status(200).json({ message: "Контакт был удален" });
 });
+app.put("/api/contacts/:id", (req, res) => {
+  const idx = TASKLIST.findIndex(({ id }) => id === req.params.id);
+  TASKLIST[idx]=req.body
+  res.status(200)
+})
 
 app.use(express.static(path.resolve(__dirname, "client")));
 app.get("*", (req, res) => {
