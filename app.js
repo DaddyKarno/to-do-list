@@ -25,9 +25,9 @@ app.delete("/api/contacts/:id", (req, res) => {
 });
 app.put("/api/contacts/:id", (req, res) => {
   const idx = TASKLIST.findIndex(({ id }) => id === req.params.id);
-  TASKLIST[idx]=req.body
-  res.status(200).json({message: "задача изменена"})
-})
+  TASKLIST[idx] = req.body;
+  res.status(200).json({ message: "задача изменена" });
+});
 
 app.use(express.static(path.resolve(__dirname, "client")));
 app.get("*", (req, res) => {

@@ -2,9 +2,36 @@ const InputElement = document.getElementById("searchInput");
 const addBtn = document.getElementById("addTaskButton");
 const listElement = document.getElementById("listTask");
 const completeBtn = document.getElementById("cmpltBtn");
+const allTaskBtn = document.getElementById("allTaskButton");
+const completedTaskBtn = document.getElementById("completedTaskButton");
+const notCompletedTaskBtn = document.getElementById("notCompletedTaskButton");
 const editBool = false;
 let test = [];
 let notes = [];
+
+allTaskBtn.onclick = () => {
+  render();
+};
+completedTaskBtn.onclick = () => {
+  listElement.innerHTML = "";
+  for (let i = 0; i < notes.length; i++) {
+    if (notes[i].completed === true) {
+      listElement.insertAdjacentHTML("beforeend", getTask(notes[i], i));
+    } else if (listElement === "") {
+      listElement.innerHTML = '<p><img src="images/empty.png"></p>';
+    }
+  }
+};
+notCompletedTaskBtn.onclick = () => {
+  listElement.innerHTML = "";
+  for (let i = 0; i < notes.length; i++) {
+    if (notes[i].completed === false) {
+      listElement.insertAdjacentHTML("beforeend", getTask(notes[i], i));
+    } else if (listElement === "") {
+      listElement.innerHTML = '<p><img src="images/empty.png"></p>';
+    }
+  }
+};
 async function render() {
   listElement.innerHTML = "";
   if (notes.length === 0) {
@@ -33,29 +60,29 @@ listElement.onclick = async function (event) {
     const index = parseInt(event.target.dataset.index);
     const type = event.target.dataset.type;
     if (type === "deleteBtn") {
-      await request(`/api/contacts/${notes[index].id}`, 'DELETE')
+      await request(`/api/contacts/${notes[index].id}`, "DELETE");
       notes.splice(index, 1);
       render();
     } else if (type === "cmpltBtn") {
-      const contact = notes[index]
-       await request(`/api/contacts/${notes[index].id}`, 'PUT',{
+      const contact = notes[index];
+      await request(`/api/contacts/${notes[index].id}`, "PUT", {
         ...contact,
-        completed: !contact.completed
-      })
-      contact.completed = !contact.completed
-       render()
-      } else if (type === "editBtn") {
+        completed: !contact.completed,
+      });
+      contact.completed = !contact.completed;
+      render();
+    } else if (type === "editBtn") {
       notes[
         index
       ].title = `<input id="editTask" type="text"></input><button id="confirmBtnId" class="confirmStyle" data-index="${index}" data-type="confirmBtn"></button>`;
       render();
     } else if (type === "confirmBtn") {
-      const contact = notes[index]
+      const contact = notes[index];
       notes[index].title = document.getElementById("editTask").value;
-      await request(`/api/contacts/${notes[index].id}`, 'PUT',{
+      await request(`/api/contacts/${notes[index].id}`, "PUT", {
         ...contact,
-        title: contact.title
-      }) 
+        title: contact.title,
+      });
       render();
     }
   }
@@ -82,7 +109,7 @@ async function loadPage() {
   for (let i = 0; i < serverNotes.length; i++) {
     notes.push(serverNotes[i]);
   }
-  render()
+  render();
 }
 async function request(url, method = "GET", data = null) {
   try {

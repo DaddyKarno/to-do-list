@@ -142,3 +142,23 @@ li {
   cursor: pointer;
   border: 0;
 }
+.statusTasks {
+  margin-top: -25px;
+  margin-right: 110px;
+  margin-bottom: -20px;
+}
+.statusTasks li {
+  display: inline-block;
+}
+.statusTasks button {
+  background-color: #6c63ff;
+  cursor: pointer;
+  border-radius: 5px;
+  border: 1px solid var(--purple, #6c63ff);
+  font-family: Kanit;
+  color: white;
+}
+.statusTasks button:hover {
+  box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+    0 17px 50px 0 rgba(0, 0, 0, 0.19);
+}
