@@ -5,16 +5,10 @@ const completeBtn = document.getElementById("cmpltBtn");
 const editBool = false;
 let test = [];
 let notes = [];
-function render() {
+async function render() {
   listElement.innerHTML = "";
-  test = JSON.parse(localStorage.getItem("Note"));
   if (notes.length === 0) {
     listElement.innerHTML = '<p><img src="images/empty.png"></p>';
-  }
-  if (notes.length > 0) {
-    localStorage.setItem("Note", JSON.stringify(notes) || "[]");
-  } else if (notes.length === 0) {
-    localStorage.setItem("Note", JSON.stringify(notes) || "[]");
   }
   for (let i = 0; i < notes.length; i++) {
     listElement.insertAdjacentHTML("beforeend", getTask(notes[i], i));
@@ -35,22 +29,21 @@ addBtn.onclick = async function () {
   InputElement.value = "";
 };
 listElement.onclick = async function (event) {
-  const { ...contact } = notes;
   if (event.target.dataset.index) {
     const index = parseInt(event.target.dataset.index);
     const type = event.target.dataset.type;
     if (type === "deleteBtn") {
-      console.log(notes[index].id)
       await request(`/api/contacts/${notes[index].id}`, 'DELETE')
       notes.splice(index, 1);
       render();
     } else if (type === "cmpltBtn") {
       const contact = notes[index]
-      const update =await request(`/api/contacts/${notes[index].id}`, 'PUT',{
+       await request(`/api/contacts/${notes[index].id}`, 'PUT',{
         ...contact,
         completed: !contact.completed
       })
-      contact.completed = update.completed
+      contact.completed = !contact.completed
+       render()
       } else if (type === "editBtn") {
       notes[
         index
@@ -59,10 +52,10 @@ listElement.onclick = async function (event) {
     } else if (type === "confirmBtn") {
       const contact = notes[index]
       notes[index].title = document.getElementById("editTask").value;
-      const update =await request(`/api/contacts/${notes[index].id}`, 'PUT',{
+      await request(`/api/contacts/${notes[index].id}`, 'PUT',{
         ...contact,
         title: contact.title
-      })
+      }) 
       render();
     }
   }
@@ -84,15 +77,12 @@ function getTask(note, index) {
       `;
 }
 async function loadPage() {
-  /*  for (let i = 0; i < test.length; i++) {
-    notes.push(test[i]);
-  } */
   serverNotes = [];
   serverNotes = await request("/api/contacts");
   for (let i = 0; i < serverNotes.length; i++) {
     notes.push(serverNotes[i]);
   }
-  render();
+  render()
 }
 async function request(url, method = "GET", data = null) {
   try {
@@ -112,5 +102,4 @@ async function request(url, method = "GET", data = null) {
     console.warn("Error", error.message);
   }
 }
-render();
 window.onload = loadPage();
